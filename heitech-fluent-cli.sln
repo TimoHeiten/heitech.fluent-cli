@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2C2E6CA9-3D58-4EB8-9667-D8829EE55906}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "heitech-fluent-cli", "src\heitech-fluent-cli\heitech-fluent-cli.csproj", "{7307B945-214C-47DB-87BC-304A33E7BF2D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{B0F0DEFB-A563-4750-A2D2-A4252EBD6F64}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "heitech-fluent-cli.Tests", "tests\heitech-fluent-cli.Tests\heitech-fluent-cli.Tests.csproj", "{3741E0C4-3568-40A1-974A-D39684CC4265}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "heitech-fluent-cli.terminal.tests", "tests\heitech-fluent-cli.terminal.tests\heitech-fluent-cli.terminal.tests.csproj", "{2ED81B84-6EC5-4E8B-BF21-E25237B5CE3A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7307B945-214C-47DB-87BC-304A33E7BF2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7307B945-214C-47DB-87BC-304A33E7BF2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7307B945-214C-47DB-87BC-304A33E7BF2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7307B945-214C-47DB-87BC-304A33E7BF2D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3741E0C4-3568-40A1-974A-D39684CC4265}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3741E0C4-3568-40A1-974A-D39684CC4265}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3741E0C4-3568-40A1-974A-D39684CC4265}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3741E0C4-3568-40A1-974A-D39684CC4265}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2ED81B84-6EC5-4E8B-BF21-E25237B5CE3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2ED81B84-6EC5-4E8B-BF21-E25237B5CE3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2ED81B84-6EC5-4E8B-BF21-E25237B5CE3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2ED81B84-6EC5-4E8B-BF21-E25237B5CE3A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7307B945-214C-47DB-87BC-304A33E7BF2D} = {2C2E6CA9-3D58-4EB8-9667-D8829EE55906}
+		{3741E0C4-3568-40A1-974A-D39684CC4265} = {B0F0DEFB-A563-4750-A2D2-A4252EBD6F64}
+		{2ED81B84-6EC5-4E8B-BF21-E25237B5CE3A} = {B0F0DEFB-A563-4750-A2D2-A4252EBD6F64}
+	EndGlobalSection
+EndGlobal
