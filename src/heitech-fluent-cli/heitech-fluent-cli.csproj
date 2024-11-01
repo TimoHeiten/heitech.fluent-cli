@@ -5,6 +5,14 @@
     <RootNamespace>heitech_fluent_cli</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+
+    <Authors>heitech</Authors>
+    <PackageId>heitech-fluent-cli</PackageId>
+    <Version>1.0.0</Version>
+    <Description>Fluent cli arguments definition and parsing for complex arg-objects</Description>
+    <PackageTags>fluent;cli;parsing;</PackageTags> 
+    <RepositoryUrl>https://github.com/heitech.fluent-cli</RepositoryUrl> 
+    <PackageLicenseExpression>MIT</PackageLicenseExpression> 
   </PropertyGroup>
 
 </Project>
