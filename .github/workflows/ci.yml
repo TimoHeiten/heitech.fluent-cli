@@ -35,4 +35,4 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore ./src/heitech-fluent-cli/heitech-fluent-cli.csproj
     - name: Test
-      run: dotnet test --no-restore 
+      run: dotnet test
