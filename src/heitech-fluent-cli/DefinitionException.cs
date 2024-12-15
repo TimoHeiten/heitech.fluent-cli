@@ -1,7 +1,10 @@
-﻿namespace heitech_fluent_cli;
+﻿using System;
 
-public sealed class DefinitionException : Exception
+namespace heitech_fluent_cli
 {
-    public DefinitionException(string msg) : base(msg)
-    { }
+    public sealed class DefinitionException : Exception
+    {
+        public DefinitionException(string msg) : base(msg)
+        { }
+    }
 }
