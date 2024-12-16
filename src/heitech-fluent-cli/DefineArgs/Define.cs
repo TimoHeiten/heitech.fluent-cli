@@ -11,6 +11,7 @@ namespace heitech_fluent_cli.DefineArgs
     /// </summary>
     public interface IDefine
     {
+        string CommandName { get; }
         string HelpText();
     }
 
@@ -18,8 +19,8 @@ namespace heitech_fluent_cli.DefineArgs
     /// Define your args ands switches
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public abstract class Define<T> 
-        : IDefine
+    internal abstract class Define<T> 
+        : IDefine, IDefine<T>
         where T : new()
     {
         public string CommandName { get; internal set; } = default!;
@@ -31,26 +32,26 @@ namespace heitech_fluent_cli.DefineArgs
         private readonly List<Description> _args = new List<Description>();
         private readonly List<Description> _optionalArgs = new List<Description>();
 
-        public Define<T> Name(string name)
+        public IDefine<T> Name(string name)
         {
             CommandName = name;
             return this;
         }
         
-        public Define<T> Argument<TA>(Expression<Func<T, TA>> expression, string longName, char? shortName = null)
+        public IDefine<T> Argument<TA>(Expression<Func<T, TA>> expression, string longName, char? shortName = null)
         {
             AddDescription(_args, _optionalArgs.Concat(_args).ToList(), expression, longName, shortName);
             return this;
         }
 
-        public Define<T> OptionalArgument<TA>(Expression<Func<T, TA>> expression, string longName
+        public IDefine<T> OptionalArgument<TA>(Expression<Func<T, TA>> expression, string longName
             , char? shortName = null)
         {
             AddDescription(_optionalArgs, _optionalArgs.Concat(_args).ToList(), expression, longName, shortName);
             return this;
         }
 
-        public Define<T> Switch(Expression<Func<T, bool>> expression, string longName, char? shortName = null)
+        public IDefine<T> Switch(Expression<Func<T, bool>> expression, string longName, char? shortName = null)
         {
             AddDescription(_switches, _switches, expression, longName, shortName);
             return this;

@@ -17,7 +17,7 @@ public sealed class ErrrorCaseTests
         public object NotSupported { get; set; } = default!;
     }
 
-    private Define<ErrorArgs> DefineErrorArgs()
+    private IDefine<ErrorArgs> DefineErrorArgs()
     {
         return new CommandDefine<ErrorArgs>()
             .Argument(x => x.Message, "message")

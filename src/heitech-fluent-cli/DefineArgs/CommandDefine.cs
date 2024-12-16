@@ -4,7 +4,7 @@ using heitech_fluent_cli.Parse;
 
 namespace heitech_fluent_cli.DefineArgs
 {
-    public sealed class CommandDefine<T> : Define<T> where T : new()
+    internal sealed class CommandDefine<T> : Define<T> where T : new()
     {
         public override bool TryParse(string[] cliArgs, out ParsedArgs<T> parsedArgs)
         {

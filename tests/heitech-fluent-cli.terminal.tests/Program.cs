@@ -8,7 +8,7 @@ var msg = string.Join(", ", cmdArgsType.GetProperties().Select(x => x.Name));
 Console.WriteLine(msg);
 
 // ---------------------------------------------------------------------------------------------------------
-// define the arguments
+// define the argument
 // ---------------------------------------------------------------------------------------------------------
 var definitions = ArgumentDefinitions.Define<CommandArgs>(define =>
     define.Name("run")
@@ -31,6 +31,7 @@ definitions.Is<CommandArgs>(args,
 // ---------------------------------------------------------------------------------------------------------
 
 Console.ReadLine();
+
 public sealed record CommandArgs
 {
     public string Name { get; set; } = default!;

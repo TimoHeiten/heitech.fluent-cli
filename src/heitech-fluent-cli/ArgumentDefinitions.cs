@@ -11,7 +11,7 @@ namespace heitech_fluent_cli
         /// <param name="defineArgs"></param>
         /// <typeparam name="TArgs"></typeparam>
         /// <returns></returns>
-        public static DefinedArguments Define<TArgs>(Action<Define<TArgs>> defineArgs) where TArgs : new()
+        public static DefinedArguments Define<TArgs>(Action<IDefine<TArgs>> defineArgs) where TArgs : new()
         {
             var def = new CommandDefine<TArgs>();
             defineArgs(def);
@@ -26,7 +26,7 @@ namespace heitech_fluent_cli
         /// <typeparam name="TArgs"></typeparam>
         /// <typeparam name="TArgs2"></typeparam>
         /// <returns></returns>
-        public static DefinedArguments Define<TArgs, TArgs2>(Action<Define<TArgs>> defineArgs, Action<Define<TArgs2>> defineArgs2) 
+        public static DefinedArguments Define<TArgs, TArgs2>(Action<IDefine<TArgs>> defineArgs, Action<IDefine<TArgs2>> defineArgs2) 
             where TArgs : new()
             where TArgs2 : new()
         {
@@ -47,9 +47,9 @@ namespace heitech_fluent_cli
         /// <typeparam name="TArgs2"></typeparam>
         /// <typeparam name="TArgs3"></typeparam>
         /// <returns></returns>
-        public static DefinedArguments Define<TArgs, TArgs2, TArgs3>(Action<Define<TArgs>> defineArgs, 
-            Action<Define<TArgs2>> defineArgs2,
-            Action<Define<TArgs3>> defineArgs3) 
+        public static DefinedArguments Define<TArgs, TArgs2, TArgs3>(Action<IDefine<TArgs>> defineArgs, 
+            Action<IDefine<TArgs2>> defineArgs2,
+            Action<IDefine<TArgs3>> defineArgs3) 
             where TArgs : new()
             where TArgs2 : new()
             where TArgs3 : new()
@@ -76,10 +76,10 @@ namespace heitech_fluent_cli
         /// <typeparam name="TArgs3"></typeparam>
         /// <typeparam name="TArgs4"></typeparam>
         /// <returns></returns>
-        public static DefinedArguments Define<TArgs, TArgs2, TArgs3, TArgs4>(Action<Define<TArgs>> defineArgs, 
-            Action<Define<TArgs2>> defineArgs2,
-            Action<Define<TArgs3>> defineArgs3,
-            Action<Define<TArgs4>> defineArgs4)
+        public static DefinedArguments Define<TArgs, TArgs2, TArgs3, TArgs4>(Action<IDefine<TArgs>> defineArgs, 
+            Action<IDefine<TArgs2>> defineArgs2,
+            Action<IDefine<TArgs3>> defineArgs3,
+            Action<IDefine<TArgs4>> defineArgs4)
             where TArgs : new()
             where TArgs2 : new()
             where TArgs3 : new()
@@ -111,11 +111,11 @@ namespace heitech_fluent_cli
         /// <typeparam name="TArgs4"></typeparam>
         /// <typeparam name="TArgs5"></typeparam>
         /// <returns></returns>
-        public static DefinedArguments Define<TArgs, TArgs2, TArgs3, TArgs4, TArgs5>(Action<Define<TArgs>> defineArgs, 
-            Action<Define<TArgs2>> defineArgs2,
-            Action<Define<TArgs3>> defineArgs3,
-            Action<Define<TArgs4>> defineArgs4,
-            Action<Define<TArgs5>> defineArgs5)
+        public static DefinedArguments Define<TArgs, TArgs2, TArgs3, TArgs4, TArgs5>(Action<IDefine<TArgs>> defineArgs, 
+            Action<IDefine<TArgs2>> defineArgs2,
+            Action<IDefine<TArgs3>> defineArgs3,
+            Action<IDefine<TArgs4>> defineArgs4,
+            Action<IDefine<TArgs5>> defineArgs5)
             where TArgs : new()
             where TArgs2 : new()
             where TArgs3 : new()
