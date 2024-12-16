@@ -14,14 +14,14 @@ namespace heitech_fluent_cli.DefineArgs
         string CommandName { get; }
         string? Describe { get; }
         string HelpText();
+        bool IsType(Type type);
     }
 
     /// <summary>
     /// Define your args ands switches
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    internal abstract class Define<T> 
-        : IDefine, IDefine<T>
+    internal abstract class Define<T> : IDefine<T>
         where T : new()
     {
         public string CommandName { get; internal set; } = default!;
@@ -92,19 +92,31 @@ namespace heitech_fluent_cli.DefineArgs
 
         public string HelpText()
         {
-            var args = _args.Select(x => $"{x.Describe ?? x.PropertyName}: -{x.ShortName} --{x.LongName}");
-            var switches = _switches.Select(x => $"{x.Describe ?? x.PropertyName}: -{x.ShortName} --{x.LongName} ");
-            var optionalArgs = _optionalArgs.Select(x => $"{x.Describe ?? x.PropertyName}: -{x.ShortName} --{x.LongName}");
+            var args = _args.Select(x => $"{x.Describe ?? x.PropertyName}: -{x.ShortName} --{x.LongName}").ToArray();
+            var switches = _switches.Select(x => $"{x.Describe ?? x.PropertyName}: -{x.ShortName} --{x.LongName} ").ToArray();
+            var optionalArgs = _optionalArgs.Select(x => $"{x.Describe ?? x.PropertyName}: -{x.ShortName} --{x.LongName}").ToArray();
 
-            return 
-                   $"Command: {CommandName}{Environment.NewLine}" +
-                   $"\t{Describe}{Environment.NewLine}" +
-                   $"Args:{Environment.NewLine}\t{ToTabbedLines(args)}{Environment.NewLine}" +
-                   $"Switches:{Environment.NewLine}\t{ToTabbedLines(switches)}{Environment.NewLine}" +
-                   $"Optional Args:{Environment.NewLine}\t{ToTabbedLines(optionalArgs)}";
+            var result =
+                $"Command: {CommandName}{Environment.NewLine}" +
+                $"\t{Describe}{Environment.NewLine}";
+            if (args.Any())
+                result += $"Args:{Environment.NewLine}\t{ToTabbedLines(args)}{Environment.NewLine}";
+
+            if (switches.Any())
+                result += $"Switches:{Environment.NewLine}\t{ToTabbedLines(switches)}{Environment.NewLine}";
+
+            if (optionalArgs.Any())
+                result += $"Optional Args:{Environment.NewLine}\t{ToTabbedLines(optionalArgs)}";
+
+            return result;
 
             string ToTabbedLines(IEnumerable<string> lines)
                 => string.Join($"{Environment.NewLine}\t", lines);
+        }
+
+        public bool IsType(Type type)
+        {
+            return type == typeof(T);
         }
     }
 }

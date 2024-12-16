@@ -18,6 +18,7 @@ namespace heitech_fluent_cli.Parse
             _value = value;
             _isSuccess = isSuccess;
         }
+        internal bool IsSuccess => _isSuccess;
 
         /// <summary>
         /// provide delegates to act on the success or error case of the parsing

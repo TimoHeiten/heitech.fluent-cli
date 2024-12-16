@@ -8,9 +8,10 @@ namespace heitech_fluent_cli.DefineArgs
     {
         public override bool TryParse(string[] cliArgs, out ParsedArgs<T> parsedArgs)
         {
-            parsedArgs = default!;
+            parsedArgs = new ParsedArgs<T>(default!, false);
+
             var commandName = CommandName ?? throw new DefinitionException("CommandName must be set");
-            if (cliArgs.Any() is false || (cliArgs[0] != commandName))
+            if (cliArgs.Any() is false || cliArgs[0] != commandName)
                 return false;
 
             if (!cliArgs.Any(x => string.Equals(x, CommandName, StringComparison.CurrentCultureIgnoreCase)))
@@ -19,7 +20,7 @@ namespace heitech_fluent_cli.DefineArgs
             try
             {
                 parsedArgs = ParseArgs(cliArgs);
-                return true;
+                return parsedArgs.IsSuccess;
             }
             catch (Exception e)
             {

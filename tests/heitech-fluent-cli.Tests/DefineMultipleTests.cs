@@ -21,7 +21,7 @@ public sealed class DefineMultipleTests
     }
     
     [Theory, MemberData(nameof(DefinedArgs))]
-    public void Multiple_args_parses_the_command(string[] cliArgs, bool a1, bool a2, bool a3)
+    public async Task Multiple_args_parses_the_command(string[] cliArgs, bool a1, bool a2, bool a3)
     {
         // Arrange
         var definedArguments = ArgumentDefinitions.Define<Args1, Args2, Args3>(
@@ -34,9 +34,11 @@ public sealed class DefineMultipleTests
         var actualA3 = false;
         
         // Act
-        definedArguments.Is<Args1>(cliArgs, (_) => actualA1 = true)
-            .Is<Args2>(cliArgs, (_) => actualA2 = true)
-            .Is<Args3>(cliArgs, (_) => actualA3 = true);
+        await definedArguments.Is<Args1>((_) => actualA1 = true)
+            .Is<Args2>((_) => actualA2 = true)
+            .Is<Args3>((_) => actualA3 = true)
+            .Build().Run(cliArgs);
+        
 
         // Assert
         actualA1.Should().Be(a1);
@@ -54,8 +56,8 @@ public sealed class DefineMultipleTests
         string[] cliArgs = {"a", "-n", "val"};
         
         // Act
-        var act = () => definedArguments.Is<Args1>(cliArgs, (_) => { })
-            .Is<Args2>(cliArgs, (_) => { });
+        var act = () => definedArguments.Is<Args1>((_) => { })
+            .Is<Args2>((_) => { });
 
         // Assert
         act.Should().Throw<DefinitionException>();

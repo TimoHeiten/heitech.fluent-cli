@@ -12,16 +12,6 @@ namespace heitech_fluent_cli.Help
 
     public sealed class HelpCommand
     {
-        public IDefine HelpMe()
-        {
-            var df = new CommandDefine<HelpArgs>()
-                .Name("help", "Prints the help for all commands or a specific description for a given command")
-                .Switch(x => x.SimpleHelp, "simple", 's', "Prints a simple help")
-                .Argument(h => h.SpecificCommand, "command", 'c', "Prints the help for a specific command");
-
-            return df;
-        }
-
         private readonly DefinedArguments _definedArguments;
         public HelpCommand(DefinedArguments definedArguments)
             => _definedArguments = definedArguments;
@@ -38,6 +28,7 @@ namespace heitech_fluent_cli.Help
             if (specificCommand is null)
             {
                 Console.WriteLine($"Command '{args.SpecificCommand}' not found");
+                SimpleHelp();
                 return;
             }
 

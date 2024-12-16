@@ -65,6 +65,8 @@ namespace heitech_fluent_cli.Parse
                     collectionToOperateOn = _switches;
                 }
 
+                // todo test - and when INT expected, but string is given - parsing fails but it is not clear with the current help message!
+                
                 // try with arg / switch (depending on the tuple)
                 bool wasSet = TrySetValue(ref argsInstance, cliArg, ref collectionToOperateOn, propInfos, converter);
                 // retry with optionalArgs

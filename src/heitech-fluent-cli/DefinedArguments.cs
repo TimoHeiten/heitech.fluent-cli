@@ -3,127 +3,79 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using heitech_fluent_cli.DefineArgs;
-using heitech_fluent_cli.Help;
 using heitech_fluent_cli.StdIn;
 
 namespace heitech_fluent_cli
 {
     /// <summary>
-    /// Access DefinedArguments and register callbacks for defined arguments.
-    /// <para></para>
-    /// Be aware of the sequential execution. So if you want to make sure stdin is always read first
-    /// define stdin as the first step.
+    /// <inheritdoc cref="IDefinedArguments"/>
     /// </summary>
-    public sealed class DefinedArguments
+    public sealed class DefinedArguments : IDefinedArguments
     {
-        private int _count;
         private bool _readFromStdIn;
         private readonly List<IDefine> _definitions = new List<IDefine>();
 
         internal IEnumerable<IDefine> Definitions => _definitions;
-        private HelpCommand _help = null!;
+        private readonly DefinedArgsParser _argsParser;
 
-        internal HelpCommand HelpCommand
-        {
-            get => _help;
-            set {
-                if (_help is null)
-                {
-                    _help = value;
-                    _definitions.Add(_help.HelpMe());
-                }
-            }
-        }
-        public DefinedArguments(params IDefine[] definitions)
+        internal DefinedArguments(params IDefine[] definitions)
         {
             _definitions.AddRange(definitions);
-            _count = _definitions.Count;
+            _argsParser = new DefinedArgsParser(this);
         }
 
-        /// <summary>
-        /// One entry in cliArgs ought to be the command name
-        /// </summary>
-        /// <param name="cliArgs"></param>
-        /// <param name="runCommand"></param>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        public DefinedArguments Is<T>(string[] cliArgs, Action<T> runCommand) where T : new()
-            => Is(cliArgs, null, runCommand);
+        public DefinedArguments Is<T>(Action<T> runCommand) where T : class,new()
+            => Add(null, runCommand);
 
-        public DefinedArguments Is<T>(string[] cliArgs, Func<T, Task> runCommandAsync) where T : new()
-            => Is(cliArgs, runCommandAsync, null!);
+        public DefinedArguments Is<T>(Func<T, Task> runCommandAsync) where T : class, new()
+            => Add(runCommandAsync, null!);
 
-        /// <summary>
-        /// Use stdin As first setup to read from stdin 
-        /// </summary>
-        /// <param name="runCommand"></param>
-        /// <returns></returns>
         public DefinedArguments IsStandardIn(Action<StdInArgs> runCommand)
         {
             var stdIn = StdinReader.ReadStdIn();
             if (stdIn is null) 
                 return this;
 
-            runCommand(stdIn);
-            _readFromStdIn = true;
+            _argsParser.ReadStdin = () =>
+            {
+                runCommand(stdIn);
+            };
 
+            _readFromStdIn = true;
             return this;
         }
 
-        private DefinedArguments Is<T>(string[] cliArgs, Func<T, Task>? runCommandAsync = null!, Action<T> runCommand = null!) where T : new()
+        private DefinedArguments Add<T>(Func<T, Task>? runCommandAsync = null!, Action<T> runCommand = null!) 
+            where T : class, new()
         {
             if (_readFromStdIn)
-                return this;
-
-            if (cliArgs.Length == 0)
-                PrintHelp();
-
-            if (cliArgs.Contains("help") || cliArgs.Contains("-h") || cliArgs.Contains("--help"))
             {
-                var hArgs = new HelpArgs();
-                if (cliArgs.Length > 1)
-                {
-                    hArgs.SimpleHelp = false;
-                    hArgs.SpecificCommand = cliArgs[1];
-                }
-                else
-                    hArgs.SimpleHelp = true;
-
-                _help.Help(hArgs);
-
+                _argsParser.IsStdIn = true;
                 return this;
             }
 
-            _count--;
-            foreach (var def in _definitions)
+            var define = _definitions.FirstOrDefault(x => x.IsType(typeof(T)));
+            if (!(define is CommandDefine<T> commandDefine))
             {
-                if (!(def is CommandDefine<T> optional)) 
-                    continue;
-
-                var canBeParsed = optional.TryParse(cliArgs, out var parsed);
-                if (!canBeParsed) 
-                    continue;
-
-                var msg = string.Join(", " , cliArgs);
-                if (runCommand != null)
-                    parsed.On(runCommand, () => LogArgs.Log("Error parsing for " + msg + " and "));
-                else if (runCommandAsync != null)
-                    parsed.OnAsync(runCommandAsync, () => LogArgs.Log("Error parsing for " + msg + " and "));
+                throw new DefinitionException($"missing a definition for {typeof(T).Name}");
             }
 
-            if (_count == 0 && cliArgs.Length > 0)
-                PrintHelp();
+            var cb = new Callback();
+            if (runCommandAsync != null)
+                cb.Create_A_SyncCallBackWithParsing(commandDefine, runCommandAsync);
+            else 
+                cb.CreateSyncCallBackWithParsing(commandDefine, runCommand);
 
-            if (_count < 0)
-            {
-                throw new DefinitionException(
-                    "At least one of the definitions you tried to use, was not properly set up. [use DefineXX to define multiple arguments]");
-            }
+            _argsParser.Add(cb, define.CommandName);
 
             return this;
-
-            void PrintHelp()
-                => _help.Help(new HelpArgs { SimpleHelp = true });
         }
+
+        /// <summary>
+        /// Combine definitions and callbacks to a runnable instance
+        /// </summary>
+        /// <returns></returns>
+        public IRunWithDefinitions Build()
+            => _argsParser;
     }
 }

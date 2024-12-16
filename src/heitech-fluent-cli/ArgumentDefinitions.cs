@@ -12,15 +12,12 @@ namespace heitech_fluent_cli
         /// <param name="defineArgs"></param>
         /// <typeparam name="TArgs"></typeparam>
         /// <returns></returns>
-        public static DefinedArguments Define<TArgs>(Action<IDefine<TArgs>> defineArgs) where TArgs : new()
+        public static IDefinedArguments Define<TArgs>(Action<IDefine<TArgs>> defineArgs) where TArgs : new()
         {
             var def = new CommandDefine<TArgs>();
             defineArgs(def);
 
             var defined = new DefinedArguments(def);
-            var help = new HelpCommand(defined);
-            defined.HelpCommand = help;
-
             return defined;
         }
 
@@ -32,7 +29,7 @@ namespace heitech_fluent_cli
         /// <typeparam name="TArgs"></typeparam>
         /// <typeparam name="TArgs2"></typeparam>
         /// <returns></returns>
-        public static DefinedArguments Define<TArgs, TArgs2>(Action<IDefine<TArgs>> defineArgs, Action<IDefine<TArgs2>> defineArgs2) 
+        public static IDefinedArguments Define<TArgs, TArgs2>(Action<IDefine<TArgs>> defineArgs, Action<IDefine<TArgs2>> defineArgs2) 
             where TArgs : new()
             where TArgs2 : new()
         {
@@ -42,8 +39,6 @@ namespace heitech_fluent_cli
             defineArgs2(def2);
 
             var defined = new DefinedArguments(def, def2);
-            var help = new HelpCommand(defined);
-            defined.HelpCommand = help;
             return defined;
         }
 
@@ -57,7 +52,7 @@ namespace heitech_fluent_cli
         /// <typeparam name="TArgs2"></typeparam>
         /// <typeparam name="TArgs3"></typeparam>
         /// <returns></returns>
-        public static DefinedArguments Define<TArgs, TArgs2, TArgs3>(Action<IDefine<TArgs>> defineArgs, 
+        public static IDefinedArguments Define<TArgs, TArgs2, TArgs3>(Action<IDefine<TArgs>> defineArgs, 
             Action<IDefine<TArgs2>> defineArgs2,
             Action<IDefine<TArgs3>> defineArgs3) 
             where TArgs : new()
@@ -72,8 +67,6 @@ namespace heitech_fluent_cli
             defineArgs3(def3);
 
             var defined = new DefinedArguments(def, def2, def3);
-            var help = new HelpCommand(defined);
-            defined.HelpCommand = help;
             return defined;
         }
 
@@ -89,7 +82,7 @@ namespace heitech_fluent_cli
         /// <typeparam name="TArgs3"></typeparam>
         /// <typeparam name="TArgs4"></typeparam>
         /// <returns></returns>
-        public static DefinedArguments Define<TArgs, TArgs2, TArgs3, TArgs4>(Action<IDefine<TArgs>> defineArgs, 
+        public static IDefinedArguments Define<TArgs, TArgs2, TArgs3, TArgs4>(Action<IDefine<TArgs>> defineArgs, 
             Action<IDefine<TArgs2>> defineArgs2,
             Action<IDefine<TArgs3>> defineArgs3,
             Action<IDefine<TArgs4>> defineArgs4)
@@ -108,8 +101,6 @@ namespace heitech_fluent_cli
             defineArgs4(def4);
 
             var defined = new DefinedArguments(def, def2, def3, def4);
-            var help = new HelpCommand(defined);
-            defined.HelpCommand = help;
             return defined;
         }
 
@@ -127,7 +118,7 @@ namespace heitech_fluent_cli
         /// <typeparam name="TArgs4"></typeparam>
         /// <typeparam name="TArgs5"></typeparam>
         /// <returns></returns>
-        public static DefinedArguments Define<TArgs, TArgs2, TArgs3, TArgs4, TArgs5>(Action<IDefine<TArgs>> defineArgs, 
+        public static IDefinedArguments Define<TArgs, TArgs2, TArgs3, TArgs4, TArgs5>(Action<IDefine<TArgs>> defineArgs, 
             Action<IDefine<TArgs2>> defineArgs2,
             Action<IDefine<TArgs3>> defineArgs3,
             Action<IDefine<TArgs4>> defineArgs4,
@@ -150,8 +141,6 @@ namespace heitech_fluent_cli
             defineArgs5(def5);
             
             var defined = new DefinedArguments(def, def2, def3, def4, def5);
-            var help = new HelpCommand(defined);
-            defined.HelpCommand = help;
             return defined;
         }
     }
