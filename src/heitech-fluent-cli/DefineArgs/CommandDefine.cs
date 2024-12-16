@@ -10,7 +10,7 @@ namespace heitech_fluent_cli.DefineArgs
         {
             parsedArgs = default!;
             var commandName = CommandName ?? throw new DefinitionException("CommandName must be set");
-            if (cliArgs[0] != commandName)
+            if (cliArgs.Any() is false || (cliArgs[0] != commandName))
                 return false;
 
             if (!cliArgs.Any(x => string.Equals(x, CommandName, StringComparison.CurrentCultureIgnoreCase)))

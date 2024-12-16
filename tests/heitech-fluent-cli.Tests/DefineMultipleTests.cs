@@ -51,7 +51,7 @@ public sealed class DefineMultipleTests
         var definedArguments = ArgumentDefinitions.Define<Args1>(
             arg1 => arg1.Name("a").Argument(x => x.Name, "name"));
 
-        string[] cliArgs = new[] {"a", "-n", "val"};
+        string[] cliArgs = {"a", "-n", "val"};
         
         // Act
         var act = () => definedArguments.Is<Args1>(cliArgs, (_) => { })

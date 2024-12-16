@@ -15,9 +15,11 @@ namespace heitech_fluent_cli.DefineArgs
         /// <param name="longName"></param>
         /// <param name="propertyName"></param>
         /// <param name="propertyType"></param>
-        public Description(char shortName, string longName, string propertyName, Type propertyType)
+        /// <param name="describe"></param>
+        public Description(char shortName, string longName, string propertyName, Type propertyType, string describe = null!)
         {
             LongName = longName;
+            Describe = describe;
             ShortName = shortName;
             PropertyName = propertyName;
             PropertyType = propertyType;
@@ -27,5 +29,7 @@ namespace heitech_fluent_cli.DefineArgs
         public string PropertyName { get; set; }
         public string LongName { get; set; }
         public char ShortName { get; set; }
+
+        public string? Describe { get; set; }
     }
 }

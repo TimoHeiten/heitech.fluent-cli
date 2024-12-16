@@ -3,15 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using heitech_fluent_cli.DefineArgs;
+using heitech_fluent_cli.StdIn;
 
 namespace heitech_fluent_cli
 {
     /// <summary>
     /// Access DefinedArguments and register callbacks for defined arguments.
+    /// <para></para>
+    /// Be aware of the sequential execution. So if you want to make sure stdin is always read first
+    /// define stdin as the first step.
     /// </summary>
     public sealed class DefinedArguments
     {
         private int _count;
+        private bool _readFromStdIn;
         private readonly List<IDefine> _definitions = new List<IDefine>();
 
         public DefinedArguments(params IDefine[] definitions)
@@ -33,10 +38,30 @@ namespace heitech_fluent_cli
         public DefinedArguments Is<T>(string[] cliArgs, Func<T, Task> runCommandAsync) where T : new()
             => Is(cliArgs, runCommandAsync, null!);
 
+        /// <summary>
+        /// Use stdin As first setup to read from stdin 
+        /// </summary>
+        /// <param name="runCommand"></param>
+        /// <returns></returns>
+        public DefinedArguments IsStandardIn(Action<StdInArgs> runCommand)
+        {
+            var stdIn = StdinReader.ReadStdIn();
+            if (stdIn is null) 
+                return this;
+
+            runCommand(stdIn);
+            _readFromStdIn = true;
+
+            return this;
+        }
+
         private DefinedArguments Is<T>(string[] cliArgs, Func<T, Task>? runCommandAsync = null!, Action<T> runCommand = null!) where T : new()
         {
+            if (_readFromStdIn)
+                return this;
+
             if (cliArgs.Length == 0)
-                throw new ArgumentException("No arguments were given");
+                PrintHelp();
 
             _count--;
             foreach (var def in _definitions)
@@ -55,12 +80,8 @@ namespace heitech_fluent_cli
                     parsed.OnAsync(runCommandAsync, () => LogArgs.Log("Error parsing for " + msg + " and "));
             }
 
-            if (_count == 0)
-            {
-                var msg = _definitions.Aggregate("", (current, arg) => current + arg.HelpText());
-                // this needs to be printed in any case (not a LOG)
-                Console.Write(msg);
-            }
+            if (_count == 0 && cliArgs.Length > 0)
+                PrintHelp();
 
             if (_count < 0)
             {
@@ -69,6 +90,13 @@ namespace heitech_fluent_cli
             }
             
             return this;
+
+            void PrintHelp()
+            {
+                var msg = _definitions.Aggregate("", (current, arg) => current + arg.HelpText());
+                // this needs to be printed in any case (not a LOG)
+                Console.Write(msg);
+            }
         }
     }
 }

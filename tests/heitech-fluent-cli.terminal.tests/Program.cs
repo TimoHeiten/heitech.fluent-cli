@@ -12,16 +12,22 @@ Console.WriteLine(msg);
 // ---------------------------------------------------------------------------------------------------------
 var definitions = ArgumentDefinitions.Define<CommandArgs>(define =>
     define.Name("run")
-        .Argument(x => x.Name, "name", 'n')
+        .Argument(x => x.Name, "name", 'n', "the name of the command")
         .Argument(x => x.Value, "value", 'v')
         .OptionalArgument(x => x.Optional, "optional", 'o')
-        .Switch(x => x.IsEnabled, "enabled", 'e'));
+        .Switch(x => x.IsEnabled, "enabled", 'e', "enables the command"));
 // ---------------------------------------------------------------------------------------------------------
 
 // ---------------------------------------------------------------------------------------------------------
 // parse and evaluate the arguments, given by the stdin
 // ---------------------------------------------------------------------------------------------------------
-definitions.Is<CommandArgs>(args, 
+definitions
+    .IsStandardIn(inArgs =>
+    {
+        var alLText = inArgs.IncomingStream.ReadToEnd();
+        Console.WriteLine("stdin was: " + alLText);
+    })
+    .Is<CommandArgs>(args, 
 (cmdArgs) =>
 {
     var givenArgs = string.Join(", ", cmdArgs!.GetType().GetProperties().Select(x => $"{x.Name}: {x.GetValue(cmdArgs)}"));

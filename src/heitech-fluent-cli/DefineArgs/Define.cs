@@ -38,31 +38,31 @@ namespace heitech_fluent_cli.DefineArgs
             return this;
         }
         
-        public IDefine<T> Argument<TA>(Expression<Func<T, TA>> expression, string longName, char? shortName = null)
+        public IDefine<T> Argument<TA>(Expression<Func<T, TA>> expression, string longName, char? shortName = null, string describe = null!)
         {
-            AddDescription(_args, _optionalArgs.Concat(_args).ToList(), expression, longName, shortName);
+            AddDescription(_args, _optionalArgs.Concat(_args).ToList(), expression, longName, shortName, describe);
             return this;
         }
 
         public IDefine<T> OptionalArgument<TA>(Expression<Func<T, TA>> expression, string longName
-            , char? shortName = null)
+            , char? shortName = null, string describe = null!)
         {
-            AddDescription(_optionalArgs, _optionalArgs.Concat(_args).ToList(), expression, longName, shortName);
+            AddDescription(_optionalArgs, _optionalArgs.Concat(_args).ToList(), expression, longName, shortName, describe);
             return this;
         }
 
-        public IDefine<T> Switch(Expression<Func<T, bool>> expression, string longName, char? shortName = null)
+        public IDefine<T> Switch(Expression<Func<T, bool>> expression, string longName, char? shortName = null, string describe = null!)
         {
-            AddDescription(_switches, _switches, expression, longName, shortName);
+            AddDescription(_switches, _switches, expression, longName, shortName, describe);
             return this;
         }
 
         private static void AddDescription<TA>(List<Description> memberCollection
             , IReadOnlyList<Description> validateOnCollection,
-            Expression<Func<T, TA>> expression, string longName, char? shortName)
+            Expression<Func<T, TA>> expression, string longName, char? shortName, string describe)
         {
             var prop = (expression.Body as MemberExpression)?.Member.Name!;
-            var description = new Description(shortName ?? longName[0], longName, prop, typeof(TA));
+            var description = new Description(shortName ?? longName[0], longName, prop, typeof(TA), describe);
 
             Validate.Definition(description, validateOnCollection
                 , typeof(TA) == typeof(bool) ? new[] { typeof(bool) } : null);
@@ -89,13 +89,16 @@ namespace heitech_fluent_cli.DefineArgs
 
         public string HelpText()
         {
-            var args = _args.Select(x => $"-{x.ShortName} --{x.LongName} : {x.PropertyType.Name}");
-            var switches = _switches.Select(x => $"-{x.ShortName} --{x.LongName} : {x.PropertyType.Name}");
-            var optionalArgs = _optionalArgs.Select(x => $"-{x.ShortName} --{x.LongName} : {x.PropertyType.Name}");
+            var args = _args.Select(x => $"{x.Describe ?? x.PropertyName}: -{x.ShortName} --{x.LongName}");
+            var switches = _switches.Select(x => $"{x.Describe ?? x.PropertyName}: -{x.ShortName} --{x.LongName} ");
+            var optionalArgs = _optionalArgs.Select(x => $"{x.Describe ?? x.PropertyName}: -{x.ShortName} --{x.LongName}");
 
-            return $"Args: {string.Join(Environment.NewLine, args)}{Environment.NewLine}" +
-                   $"Switches: {string.Join(Environment.NewLine, switches)}{Environment.NewLine}" +
-                   $"Optional Args: {string.Join(Environment.NewLine, optionalArgs)}";
+            return $"Args:{Environment.NewLine}\t{ToTabbedLines(args)}{Environment.NewLine}" +
+                   $"Switches:{Environment.NewLine}\t{ToTabbedLines(switches)}{Environment.NewLine}" +
+                   $"Optional Args:{Environment.NewLine}\t{ToTabbedLines(optionalArgs)}";
+
+            string ToTabbedLines(IEnumerable<string> lines)
+                => string.Join($"{Environment.NewLine}\t", lines);
         }
     }
 }
