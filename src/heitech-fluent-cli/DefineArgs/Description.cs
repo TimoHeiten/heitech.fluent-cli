@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace heitech_fluent_cli
+namespace heitech_fluent_cli.DefineArgs
 {
 
     /// <summary>

@@ -1,4 +1,6 @@
 ﻿using FluentAssertions;
+using heitech_fluent_cli.DefineArgs;
+using heitech_fluent_cli.Parse;
 
 namespace heitech_fluent_cli.Tests;
 
@@ -11,7 +13,7 @@ public sealed class ErrrorCaseTests
         public string? InnerError { get; set; }
         public bool ShouldSerialize { get; set; }
 
-        [IgnoreMemberAsArgumentAttribute]
+        [IgnoreMemberAsArgument]
         public object NotSupported { get; set; } = default!;
     }
 

@@ -1,4 +1,5 @@
 using FluentAssertions;
+using heitech_fluent_cli.DefineArgs;
 
 namespace heitech_fluent_cli.Tests;
 

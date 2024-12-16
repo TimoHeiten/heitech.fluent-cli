@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace heitech_fluent_cli
+namespace heitech_fluent_cli.Parse
 {
     /// <summary>
     /// Marks a Member as not to be included as an argument for the Definition of Arguments

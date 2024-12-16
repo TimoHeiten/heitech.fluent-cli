@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using heitech_fluent_cli.DefineArgs;
 
-namespace heitech_fluent_cli
+namespace heitech_fluent_cli.Parse
 {
     /// <summary>
     /// Provides different methods to validate the Definition of Arguments

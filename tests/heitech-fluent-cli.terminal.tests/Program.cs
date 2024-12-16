@@ -1,4 +1,6 @@
 ﻿using heitech_fluent_cli;
+using heitech_fluent_cli.DefineArgs;
+using heitech_fluent_cli.Parse;
 
 var cmdArgsType = typeof(CommandArgs);
 Console.WriteLine($"Run tests with '{cmdArgsType.Name}':");

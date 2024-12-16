@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using heitech_fluent_cli.Parse;
 
-namespace heitech_fluent_cli
+namespace heitech_fluent_cli.DefineArgs
 {
 //
     /// <summary>
