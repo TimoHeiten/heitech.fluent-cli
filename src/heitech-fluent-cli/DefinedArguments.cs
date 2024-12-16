@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using heitech_fluent_cli.DefineArgs;
+using heitech_fluent_cli.Help;
 using heitech_fluent_cli.StdIn;
 
 namespace heitech_fluent_cli
@@ -19,6 +20,20 @@ namespace heitech_fluent_cli
         private bool _readFromStdIn;
         private readonly List<IDefine> _definitions = new List<IDefine>();
 
+        internal IEnumerable<IDefine> Definitions => _definitions;
+        private HelpCommand _help = null!;
+
+        internal HelpCommand HelpCommand
+        {
+            get => _help;
+            set {
+                if (_help is null)
+                {
+                    _help = value;
+                    _definitions.Add(_help.HelpMe());
+                }
+            }
+        }
         public DefinedArguments(params IDefine[] definitions)
         {
             _definitions.AddRange(definitions);
@@ -63,6 +78,22 @@ namespace heitech_fluent_cli
             if (cliArgs.Length == 0)
                 PrintHelp();
 
+            if (cliArgs.Contains("help") || cliArgs.Contains("-h") || cliArgs.Contains("--help"))
+            {
+                var hArgs = new HelpArgs();
+                if (cliArgs.Length > 1)
+                {
+                    hArgs.SimpleHelp = false;
+                    hArgs.SpecificCommand = cliArgs[1];
+                }
+                else
+                    hArgs.SimpleHelp = true;
+
+                _help.Help(hArgs);
+
+                return this;
+            }
+
             _count--;
             foreach (var def in _definitions)
             {
@@ -88,15 +119,11 @@ namespace heitech_fluent_cli
                 throw new DefinitionException(
                     "At least one of the definitions you tried to use, was not properly set up. [use DefineXX to define multiple arguments]");
             }
-            
+
             return this;
 
             void PrintHelp()
-            {
-                var msg = _definitions.Aggregate("", (current, arg) => current + arg.HelpText());
-                // this needs to be printed in any case (not a LOG)
-                Console.Write(msg);
-            }
+                => _help.Help(new HelpArgs { SimpleHelp = true });
         }
     }
 }

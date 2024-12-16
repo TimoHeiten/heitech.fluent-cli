@@ -11,7 +11,7 @@ Console.WriteLine(msg);
 // define the argument
 // ---------------------------------------------------------------------------------------------------------
 var definitions = ArgumentDefinitions.Define<CommandArgs>(define =>
-    define.Name("run")
+    define.Name("run", "run the test command")
         .Argument(x => x.Name, "name", 'n', "the name of the command")
         .Argument(x => x.Value, "value", 'v')
         .OptionalArgument(x => x.Optional, "optional", 'o')
