@@ -12,6 +12,19 @@ So I needed a quick way to define some Arguments / Switches and StdIn via callba
 
 ## Usage
 ## Example from the tests/terminal.tests assembly:
+
+#### call via 
+``` bash
+# with commandname and arg:
+./my-cli run -n "cmd1"
+# also with switch
+./my-cli run -n "cmd1" -e
+
+# via stdin (example config.json file)
+cat (config.json) | ./my-cli 
+```
+
+#### define like so
 ``` csharp
 
 var cmdArgsType = typeof(CommandArgs);
