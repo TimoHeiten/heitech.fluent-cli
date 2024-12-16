@@ -74,7 +74,7 @@ namespace heitech_fluent_cli.Parse
                 if (wasSet)
                     continue;
 
-                Console.WriteLine($"Argument/switch '{cliArg.name}' has not been defined");
+                LogArgs.Log($"Argument/switch '{cliArg.name}' has not been defined");
                 return new ParsedArgs<T>(default, false);
             }
 
@@ -84,7 +84,7 @@ namespace heitech_fluent_cli.Parse
                 var msg = string.Join(Environment.NewLine
                     , _args.Select(x =>
                         $"Defined (non optional) Argument '-{x.ShortName}, --{x.LongName}' has not been assigned a value"));
-                Console.WriteLine(msg);
+                LogArgs.Log(msg);
                 return new ParsedArgs<T>(argsInstance, ignoreNotAllPropertiesSet);
             }
 
@@ -118,8 +118,8 @@ namespace heitech_fluent_cli.Parse
         {
             var switches = string.Join(Environment.NewLine, _switches.Select(x => $"-{x.ShortName}, --{x.LongName}"));
             var args = string.Join(Environment.NewLine, _args.Select(x => $"-{x.ShortName}, --{x.LongName}"));
-            Console.WriteLine($"Switches: {switches}");
-            Console.WriteLine($"Args: {args}");
+            LogArgs.Log($"Switches: {switches}");
+            LogArgs.Log($"Args: {args}");
         }
 
         private static object? ParseValue(Type type, string argValue)
