@@ -12,7 +12,7 @@ So I needed a quick way to define some Arguments / Switches and StdIn via callba
 
 ## Usage
 ## Example from the tests/terminal.tests assembly:
-```csarp
+``` csharp
 
 var cmdArgsType = typeof(CommandArgs);
 Console.WriteLine($"Run tests with '{cmdArgsType.Name}':");
