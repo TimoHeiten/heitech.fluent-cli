@@ -10,23 +10,24 @@ Console.WriteLine(msg);
 // ---------------------------------------------------------------------------------------------------------
 // define the arguments
 // ---------------------------------------------------------------------------------------------------------
-var definition = new Define<CommandArgs>()
-    .Argument(x => x.Name, "name", 'n')
-    .Argument(x => x.Value, "value", 'v')
-    .OptionalArgument(x => x.Optional, "optional", 'o')
-    .Switch(x => x.IsEnabled, "enabled", 'e');
+var definitions = ArgumentDefinitions.Define<CommandArgs>(define =>
+    define.Name("run")
+        .Argument(x => x.Name, "name", 'n')
+        .Argument(x => x.Value, "value", 'v')
+        .OptionalArgument(x => x.Optional, "optional", 'o')
+        .Switch(x => x.IsEnabled, "enabled", 'e'));
 // ---------------------------------------------------------------------------------------------------------
 
 // ---------------------------------------------------------------------------------------------------------
 // parse and evaluate the arguments, given by the stdin
 // ---------------------------------------------------------------------------------------------------------
-var result = definition.ParseArgs(args);
-result.On(cmdArgs =>
+definitions.Is<CommandArgs>(args, 
+(cmdArgs) =>
 {
     var givenArgs = string.Join(", ", cmdArgs!.GetType().GetProperties().Select(x => $"{x.Name}: {x.GetValue(cmdArgs)}"));
     Console.WriteLine("the given arguments: ");
     Console.WriteLine(givenArgs);
-}, () => Console.WriteLine("something did not work :("));
+});
 // ---------------------------------------------------------------------------------------------------------
 
 Console.ReadLine();

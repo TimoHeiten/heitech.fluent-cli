@@ -19,7 +19,7 @@ public sealed class ErrrorCaseTests
 
     private Define<ErrorArgs> DefineErrorArgs()
     {
-        return new Define<ErrorArgs>()
+        return new CommandDefine<ErrorArgs>()
             .Argument(x => x.Message, "message")
             .Argument(x => x.ErrorCode, "code")
             .OptionalArgument(x => x.InnerError, "inner-error")
@@ -30,7 +30,7 @@ public sealed class ErrrorCaseTests
     public void NotAll_Properties_Are_Defined_On_Object_Returns_Error()
     {
         // Arrange
-        var definition = new Define<ErrorArgs>()
+        var definition = new CommandDefine<ErrorArgs>()
             .Argument(x => x.ErrorCode, "code")
             .OptionalArgument(x => x.InnerError, "inner-error")
             .Switch(x => x.ShouldSerialize, "serialize");
@@ -52,7 +52,7 @@ public sealed class ErrrorCaseTests
     public void NotAll_Properties_Are_Defined_On_Object_Returns_NO_Error_If_IgnoreFlag_Is_Set()
     {
         // Arrange
-        var definition = new Define<ErrorArgs>()
+        var definition = new CommandDefine<ErrorArgs>()
             .Argument(x => x.ErrorCode, "code")
             .OptionalArgument(x => x.InnerError, "inner-error")
             .Switch(x => x.ShouldSerialize, "serialize");
@@ -73,7 +73,7 @@ public sealed class ErrrorCaseTests
     public void Not_All_Properties_Where_Set()
     {
         // Arrange
-        var definition = new Define<ErrorArgs>()
+        var definition = new CommandDefine<ErrorArgs>()
             .Argument(x => x.Message, "message")
             .OptionalArgument(x => x.InnerError, "inner-error")
             .Switch(x => x.ShouldSerialize, "serialize");

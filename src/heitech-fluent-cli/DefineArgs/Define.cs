@@ -6,14 +6,24 @@ using heitech_fluent_cli.Parse;
 
 namespace heitech_fluent_cli.DefineArgs
 {
-//
+    /// <summary>
+    /// Represents a single defined argument
+    /// </summary>
+    public interface IDefine
+    {
+        string HelpText();
+    }
+
     /// <summary>
     /// Define your args ands switches
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public sealed class Define<T>
+    public abstract class Define<T> 
+        : IDefine
         where T : new()
     {
+        public string CommandName { get; internal set; } = default!;
+
         // switches
         private readonly List<Description> _switches = new List<Description>();
 
@@ -21,6 +31,12 @@ namespace heitech_fluent_cli.DefineArgs
         private readonly List<Description> _args = new List<Description>();
         private readonly List<Description> _optionalArgs = new List<Description>();
 
+        public Define<T> Name(string name)
+        {
+            CommandName = name;
+            return this;
+        }
+        
         public Define<T> Argument<TA>(Expression<Func<T, TA>> expression, string longName, char? shortName = null)
         {
             AddDescription(_args, _optionalArgs.Concat(_args).ToList(), expression, longName, shortName);
@@ -52,6 +68,14 @@ namespace heitech_fluent_cli.DefineArgs
             memberCollection.Add(description);
         }
 
+        /// <summary>
+        /// Try parse the arguments
+        /// </summary>
+        /// <param name="cliArgs"></param>
+        /// <param name="parsedArgs"></param>
+        /// <returns></returns>
+        public abstract bool TryParse(string[] cliArgs, out ParsedArgs<T> parsedArgs);
+
         public ParsedArgs<T> ParseArgs(string[] cliArgs, bool allPropertiesMustBeDefined = true
             , bool ignoreAllPropertiesSet = false)
         {
@@ -60,6 +84,17 @@ namespace heitech_fluent_cli.DefineArgs
 
             var parseArguments = new ParseArguments<T>(_args, _optionalArgs, _switches);
             return parseArguments.ParseArgs(cliArgs, ignoreAllPropertiesSet);
+        }
+
+        public string HelpText()
+        {
+            var args = _args.Select(x => $"-{x.ShortName} --{x.LongName} : {x.PropertyType.Name}");
+            var switches = _switches.Select(x => $"-{x.ShortName} --{x.LongName} : {x.PropertyType.Name}");
+            var optionalArgs = _optionalArgs.Select(x => $"-{x.ShortName} --{x.LongName} : {x.PropertyType.Name}");
+
+            return $"Args: {string.Join(Environment.NewLine, args)}{Environment.NewLine}" +
+                   $"Switches: {string.Join(Environment.NewLine, switches)}{Environment.NewLine}" +
+                   $"Optional Args: {string.Join(Environment.NewLine, optionalArgs)}";
         }
     }
 }
