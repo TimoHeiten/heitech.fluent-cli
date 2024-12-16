@@ -8,10 +8,10 @@
 
     <Authors>heitech</Authors>
     <PackageId>heitech-fluent-cli</PackageId>
-    <Version>2.1.0</Version>
+    <Version>2.2.0</Version>
     <Description>Fluent cli arguments definition and parsing for complex arg-objects</Description>
     <PackageTags>fluent;cli;parsing;</PackageTags> 
-    <RepositoryUrl>https://github.com/heitech.fluent-cli</RepositoryUrl> 
+    <RepositoryUrl>https://github.com/TimoHeiten/heitech.fluent-cli</RepositoryUrl> 
     <PackageLicenseExpression>MIT</PackageLicenseExpression> 
   </PropertyGroup>
 

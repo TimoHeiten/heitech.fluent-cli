@@ -22,4 +22,4 @@ checkExitCode "Test failed"
 dotnet pack .\src\heitech-fluent-cli\heitech-fluent-cli.csproj -c Release
 
 # publish package
-dotnet nuget push .\src\heitech-fluent-cli\bin\Release\heitech-fluent-cli.2.0.0.nupkg --api-key $apiKey --source https://api.nuget.org/v3/index.json
+dotnet nuget push .\src\heitech-fluent-cli\bin\Release\heitech-fluent-cli.2.2.0.nupkg --api-key $apiKey --source https://api.nuget.org/v3/index.json
