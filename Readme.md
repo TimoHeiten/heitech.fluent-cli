@@ -3,6 +3,11 @@
 Motivation: I build a lot of CLI applications to help my development efforts.
 So I needed a quick way to define some Arguments / Switches and StdIn via callbacks.
 
+### install like so:
+``` bash
+dotnet add package heitech-fluent-cli --version 2.0.0
+```
+
 #### My requriments:
     - small interface
     - define fluently
