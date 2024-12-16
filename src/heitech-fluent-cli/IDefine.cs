@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq.Expressions;
+using heitech_fluent_cli.DefineArgs;
 using heitech_fluent_cli.Parse;
 
 namespace heitech_fluent_cli
@@ -8,14 +9,15 @@ namespace heitech_fluent_cli
     /// Definition for a single argument
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface IDefine<T> where T : new()
+    public interface IDefine<T> : IDefine 
+        where T : new()
     {
         /// <summary>
         /// The command name associated with this arguments
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        IDefine<T> Name(string name);
+        IDefine<T> Name(string name, string describe = null!);
 
         /// <summary>
         /// Define a new argument. (like -n "value", or --name "value")

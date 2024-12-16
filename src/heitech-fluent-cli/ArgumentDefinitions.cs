@@ -1,5 +1,6 @@
 ﻿using System;
 using heitech_fluent_cli.DefineArgs;
+using heitech_fluent_cli.Help;
 
 namespace heitech_fluent_cli
 {
@@ -15,7 +16,12 @@ namespace heitech_fluent_cli
         {
             var def = new CommandDefine<TArgs>();
             defineArgs(def);
-            return new DefinedArguments(def);
+
+            var defined = new DefinedArguments(def);
+            var help = new HelpCommand(defined);
+            defined.HelpCommand = help;
+
+            return defined;
         }
 
         /// <summary>
@@ -34,7 +40,11 @@ namespace heitech_fluent_cli
             defineArgs(def);
             var def2 = new CommandDefine<TArgs2>();
             defineArgs2(def2);
-            return new DefinedArguments(def, def2);
+
+            var defined = new DefinedArguments(def, def2);
+            var help = new HelpCommand(defined);
+            defined.HelpCommand = help;
+            return defined;
         }
 
         /// <summary>
@@ -60,8 +70,11 @@ namespace heitech_fluent_cli
             defineArgs2(def2);
             var def3 = new CommandDefine<TArgs3>();
             defineArgs3(def3);
-            
-            return new DefinedArguments(def, def2, def3);
+
+            var defined = new DefinedArguments(def, def2, def3);
+            var help = new HelpCommand(defined);
+            defined.HelpCommand = help;
+            return defined;
         }
 
         /// <summary>
@@ -93,8 +106,11 @@ namespace heitech_fluent_cli
             defineArgs3(def3);
             var def4 = new CommandDefine<TArgs4>();
             defineArgs4(def4);
-            
-            return new DefinedArguments(def, def2, def3, def4);
+
+            var defined = new DefinedArguments(def, def2, def3, def4);
+            var help = new HelpCommand(defined);
+            defined.HelpCommand = help;
+            return defined;
         }
 
         /// <summary>
@@ -133,7 +149,10 @@ namespace heitech_fluent_cli
             var def5 = new CommandDefine<TArgs5>();
             defineArgs5(def5);
             
-            return new DefinedArguments(def, def2, def3, def4, def5);
+            var defined = new DefinedArguments(def, def2, def3, def4, def5);
+            var help = new HelpCommand(defined);
+            defined.HelpCommand = help;
+            return defined;
         }
     }
 }

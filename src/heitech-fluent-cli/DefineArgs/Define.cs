@@ -12,6 +12,7 @@ namespace heitech_fluent_cli.DefineArgs
     public interface IDefine
     {
         string CommandName { get; }
+        string? Describe { get; }
         string HelpText();
     }
 
@@ -24,6 +25,7 @@ namespace heitech_fluent_cli.DefineArgs
         where T : new()
     {
         public string CommandName { get; internal set; } = default!;
+        public string? Describe { get; internal set; } = default!;
 
         // switches
         private readonly List<Description> _switches = new List<Description>();
@@ -32,9 +34,10 @@ namespace heitech_fluent_cli.DefineArgs
         private readonly List<Description> _args = new List<Description>();
         private readonly List<Description> _optionalArgs = new List<Description>();
 
-        public IDefine<T> Name(string name)
+        public IDefine<T> Name(string name, string describe = null!)
         {
             CommandName = name;
+            Describe = describe;
             return this;
         }
         
@@ -93,7 +96,10 @@ namespace heitech_fluent_cli.DefineArgs
             var switches = _switches.Select(x => $"{x.Describe ?? x.PropertyName}: -{x.ShortName} --{x.LongName} ");
             var optionalArgs = _optionalArgs.Select(x => $"{x.Describe ?? x.PropertyName}: -{x.ShortName} --{x.LongName}");
 
-            return $"Args:{Environment.NewLine}\t{ToTabbedLines(args)}{Environment.NewLine}" +
+            return 
+                   $"Command: {CommandName}{Environment.NewLine}" +
+                   $"\t{Describe}{Environment.NewLine}" +
+                   $"Args:{Environment.NewLine}\t{ToTabbedLines(args)}{Environment.NewLine}" +
                    $"Switches:{Environment.NewLine}\t{ToTabbedLines(switches)}{Environment.NewLine}" +
                    $"Optional Args:{Environment.NewLine}\t{ToTabbedLines(optionalArgs)}";
 
