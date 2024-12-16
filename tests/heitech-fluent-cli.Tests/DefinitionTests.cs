@@ -1,4 +1,5 @@
 using FluentAssertions;
+using heitech_fluent_cli.DefineArgs;
 
 namespace heitech_fluent_cli.Tests;
 
@@ -17,7 +18,7 @@ public sealed class DefinitionTests
         var args = new[] {"-s", "400", "--path", "C:\\home", "--verbose"};
 
         // Act
-        var definition = new Define<Args>()
+        var definition = new CommandDefine<Args>()
             .Argument(x => x.Size, "size")
             .Argument(x => x.Path, "path")
             .Switch(x => x.IsVerbose, "verbose");
@@ -41,7 +42,7 @@ public sealed class DefinitionTests
         var args = new[] {"-s", "400", "--path", "C:\\home"};
 
         // Act
-        var definition = new Define<Args>()
+        var definition = new CommandDefine<Args>()
             .Argument(x => x.Size, "size")
             .Argument(x => x.Path, "path")
             .Switch(x => x.IsVerbose, "verbose");
@@ -66,6 +67,38 @@ public sealed class DefinitionTests
         { }
     }
 
+    [Theory]
+    [InlineData("test", "", "C:\\home")]
+    [InlineData(null, "-p", "C:\\home")]
+    [InlineData("test", "-p", "")]
+    public void TryParseArgs_Returns_Fals_If_Any_Value_IsMissing(string cmd, string arg, string path)
+    {
+        // arrange
+        var definedArgs = new CommandDefine<Args>()
+            .Name("test")
+            .Argument(x => x.Path, "p");
+
+        // act
+        var result = definedArgs.TryParse(new[] { cmd, arg, path}, out var args);
+
+        // Assert
+        result.Should().BeFalse();
+    }
+
+    [Fact]
+    public void NoCommandName_Throws()
+    {
+        // arrange
+        var definedArgs = new CommandDefine<Args>()
+            .Argument(x => x.Path, "p");
+
+        // act
+        var act = () => definedArgs.TryParse(new[] {"-p", "path"}, out var args);
+
+        // Assert
+        act.Should().Throw<DefinitionException>();
+    }
+
     [Fact]
     public void Double_Hyphen_works_in_definition()
     {
@@ -73,7 +106,7 @@ public sealed class DefinitionTests
         var args = new [] { "--a-b-c", "value" };
 
         // Act
-        var definition = new Define<ArgsWithHyphens>()
+        var definition = new CommandDefine<ArgsWithHyphens>()
             .Argument(x => x.Abc, "a-b-c", 'b');
 
         // Assert
@@ -99,7 +132,7 @@ public sealed class DefinitionTests
         };
 
         // Act
-        var definition = new Define<OptionalArgs>()
+        var definition = new CommandDefine<OptionalArgs>()
             .OptionalArgument(x => x.Optional, "optional")
             .Argument(x => x.NonOptional, "non-optional")
             .Switch(x => x.Switch1, "switch1", 's')
@@ -130,7 +163,7 @@ public sealed class DefinitionTests
         };
 
         // Act
-        var definition = new Define<OptionalArgs>()
+        var definition = new CommandDefine<OptionalArgs>()
             .OptionalArgument(x => x.Optional, "optional")
             .Argument(x => x.NonOptional, "non-optional")
             .Switch(x => x.Switch1, "switch1", 's')

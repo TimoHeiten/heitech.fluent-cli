@@ -1,4 +1,6 @@
 ﻿using FluentAssertions;
+using heitech_fluent_cli.DefineArgs;
+using heitech_fluent_cli.Parse;
 
 namespace heitech_fluent_cli.Tests;
 
@@ -11,13 +13,13 @@ public sealed class ErrrorCaseTests
         public string? InnerError { get; set; }
         public bool ShouldSerialize { get; set; }
 
-        [IgnoreMemberAsArgumentAttribute]
+        [IgnoreMemberAsArgument]
         public object NotSupported { get; set; } = default!;
     }
 
-    private Define<ErrorArgs> DefineErrorArgs()
+    private IDefine<ErrorArgs> DefineErrorArgs()
     {
-        return new Define<ErrorArgs>()
+        return new CommandDefine<ErrorArgs>()
             .Argument(x => x.Message, "message")
             .Argument(x => x.ErrorCode, "code")
             .OptionalArgument(x => x.InnerError, "inner-error")
@@ -28,7 +30,7 @@ public sealed class ErrrorCaseTests
     public void NotAll_Properties_Are_Defined_On_Object_Returns_Error()
     {
         // Arrange
-        var definition = new Define<ErrorArgs>()
+        var definition = new CommandDefine<ErrorArgs>()
             .Argument(x => x.ErrorCode, "code")
             .OptionalArgument(x => x.InnerError, "inner-error")
             .Switch(x => x.ShouldSerialize, "serialize");
@@ -50,7 +52,7 @@ public sealed class ErrrorCaseTests
     public void NotAll_Properties_Are_Defined_On_Object_Returns_NO_Error_If_IgnoreFlag_Is_Set()
     {
         // Arrange
-        var definition = new Define<ErrorArgs>()
+        var definition = new CommandDefine<ErrorArgs>()
             .Argument(x => x.ErrorCode, "code")
             .OptionalArgument(x => x.InnerError, "inner-error")
             .Switch(x => x.ShouldSerialize, "serialize");
@@ -71,7 +73,7 @@ public sealed class ErrrorCaseTests
     public void Not_All_Properties_Where_Set()
     {
         // Arrange
-        var definition = new Define<ErrorArgs>()
+        var definition = new CommandDefine<ErrorArgs>()
             .Argument(x => x.Message, "message")
             .OptionalArgument(x => x.InnerError, "inner-error")
             .Switch(x => x.ShouldSerialize, "serialize");

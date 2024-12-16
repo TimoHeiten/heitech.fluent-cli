@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using heitech_fluent_cli.DefineArgs;
 
-namespace heitech_fluent_cli
+namespace heitech_fluent_cli.Parse
 {
     /// <summary>
     /// Provides different methods to validate the Definition of Arguments
@@ -29,27 +30,19 @@ namespace heitech_fluent_cli
         {
             var propertyIsAssigned = existingArgs.Any(x => x.PropertyName == validateThis.PropertyName);
             if (propertyIsAssigned)
-            {
                 throw new DefinitionException($"Property '{validateThis.PropertyName}' is already assigned");
-            }
 
             var shortNameIsAssigned = existingArgs.Any(x => x.ShortName == validateThis.ShortName);
             if (shortNameIsAssigned)
-            {
                 throw new DefinitionException($"ShortName '{validateThis.ShortName}' is already assigned");
-            }
 
             var longNameIsAssigned = existingArgs.Any(x => x.LongName == validateThis.LongName);
             if (longNameIsAssigned)
-            {
                 throw new DefinitionException($"LongName '{validateThis.LongName}' is already assigned");
-            }
 
             var isAllowedType = (allowedTypes ?? s_allowedTypes).Any(x => x == validateThis.PropertyType);
             if (!isAllowedType)
-            {
                 throw new DefinitionException($"Type '{validateThis.PropertyType.Name}' is not allowed");
-            }
         }
 
         /// <summary>
@@ -59,7 +52,7 @@ namespace heitech_fluent_cli
         /// <param name="switches"></param>
         /// <typeparam name="T"></typeparam>
         /// <exception cref="DefinitionException"></exception>
-        public static void AllPropertiesAreDefined<T>(IReadOnlyList<Description> toList
+        internal static void AllPropertiesAreDefined<T>(IReadOnlyList<Description> toList
             , IReadOnlyList<Description> switches) where T : new()
         {
             var properties = typeof(T).GetProperties()

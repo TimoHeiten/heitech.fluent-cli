@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace heitech_fluent_cli
+namespace heitech_fluent_cli.Parse
 {
     /// <summary>
     /// The parsed result of the cli arguments
